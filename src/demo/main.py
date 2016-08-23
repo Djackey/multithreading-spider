@@ -9,9 +9,9 @@ import Queue
 import time
 
 from ProxyConsumer import SpiderConsumer
-from src.CheckConsumer import CheckConsumer, ProcessWorker
+from CheckConsumer import CheckConsumer, ProcessWorker
 
-from src.demo.ProxyProducer import KuaiProducer, LiuLiuProducer, XiCiProducer
+from ProxyProducer import KuaiProducer, LiuLiuProducer, XiCiProducer
 
 
 def main():
@@ -55,7 +55,7 @@ def main():
         check.start()
     ip_queue.join()
     print '\n开始地址写入:\n'
-    with open('proxy.txt', 'a+') as f1:
+    with open('D:\d17文件夹\python spider\ZixunWaci\proxy.txt', 'a+') as f1:
         for check in check_list:
             for itm in check.available_list:
                 available_addr += 1
