@@ -9,6 +9,7 @@ import threading
 
 import requests
 import sys
+import urllib2
 
 
 class CheckConsumer(threading.Thread):
@@ -18,10 +19,15 @@ class CheckConsumer(threading.Thread):
         self.cq = cq
         self.name = name
         self.available_list = []
-        self.check_url1 = 'http://www.so.com'
-        self.check_url2 = 'http://www.bing.com'
-        self.check_url3 = 'http://www.zhihu.com'
+        # self.check_url1 = 'http://www.so.com'
+        # self.check_url2 = 'http://www.bing.com'
+        # self.check_url3 = 'http://www.zhihu.com'
         self.check_url4 = 'http://s.tool.chinaz.com/baidu/words.aspx#form'
+        self.params = {'by': '0',
+                       'kw': '红酒',
+                       'page': '1'
+                       }
+
         self.proxies = {
             'http': proxy,
             'https': proxy
@@ -58,21 +64,24 @@ class CheckConsumer(threading.Thread):
 
     def _request(self, url):
         try:
-            res = requests.get(url, headers=self.headers,
-                               proxies=self.proxies, timeout=4)
+            # res = requests.get(url, headers=self.headers,
+            #                    proxies=self.proxies, timeout=4)
+            res = requests.post(
+                url, headers=self.headers, params=self.params, proxies=self.proxies, timeout=7)
         except Exception, e:
             return False
         else:
-            if res.status_code == 200:
+            if res.status_code == 200 or len(res.text) >= 5000:
                 return True
             else:
                 return False
 
     def check_proxy(self):
-        check_one = self._request(self.check_url1)
-        check_two = self._request(self.check_url2)
-        check_three = self._request(self.check_url3)
-        return check_one and check_two and check_three
+        # check_one = self._request(self.check_url1)
+        # check_two = self._request(self.check_url2)
+        # check_three = self._request(self.check_url3)
+        check_four = self._request(self.check_url4)
+        return check_four
 
     def save_addr(self, addr):
         self.available_list.append(addr)
